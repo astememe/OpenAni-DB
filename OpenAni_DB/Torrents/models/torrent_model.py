@@ -1,10 +1,10 @@
 from django.db import models
 
 
-class Torrent(models.Model):
+class TorrentModel(models.Model):
     titulo = models.CharField(max_length=200)
     tamano = models.CharField(max_length=50)
-    fecha = models.CharField(max_length=20)
+    fecha = models.TextField(max_length=20)
     categoria = models.CharField(max_length=100)
     seeders = models.IntegerField()
     leechers = models.IntegerField()
@@ -14,7 +14,9 @@ class Torrent(models.Model):
 
     class Meta:
         db_table = "torrents"
-        ordering = ["-fecha"]
+        ordering = ["-tamano"]
+        verbose_name = "Torrent"
+        verbose_name_plural = "Torrent"
 
     def __str__(self):
         return f"{self.titulo} - {self.categoria}"

@@ -35,7 +35,7 @@ class UsuarioManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
 
-class Usuario(PermissionsMixin, AbstractBaseUser):
+class UsuarioModel(PermissionsMixin, AbstractBaseUser):
     username = models.CharField(max_length=15, unique=True)
     email = models.EmailField(max_length=50, unique=True)
 
