@@ -31,7 +31,6 @@ class UsuarioManager(BaseUserManager):
         return user
 
     def create_superuser(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
 
@@ -43,7 +42,6 @@ class UsuarioModel(PermissionsMixin, AbstractBaseUser):
     descripcion = models.TextField(max_length=250, blank=True)
 
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
 
     objects = UsuarioManager()
 
