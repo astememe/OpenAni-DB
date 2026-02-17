@@ -47,10 +47,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework.simplejwt',
+    'rest_framework_simplejwt',
 
-    'Users',
     'Torrents',
+    'Users',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +141,4 @@ MEDIA_ROOT = ASSETS_DIR / 'media'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = "Usuarios.UsuarioModel"
+AUTH_USER_MODEL = "Users.UsuarioModel"
