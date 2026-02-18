@@ -5,31 +5,60 @@ from django.db import models
 # class UsuarioManager(BaseUserManager):
 # Lógica de verificación (Fabio)
 
-class UserModel(PermissionError, AbstractBaseUser):
-    usuario = models.CharField(max_length=15, unique=True, null= False, blank=False, verbose_name="usuario")
-    correo = models.EmailField(max_length=100, unique=True, null=False, blank=False, verbose_name="Correo electrónico", help_text="(Obligatorio)")
+class UserManager(BaseUserManager):
+    def create_user(self, email=None, password=None, **extra_fields):
+        if not email:
+            raise ValueError("El correo electrónico no puede estar vacío")
+
+        # for domain in NOT_ALLOWED_DOMAIN:
+        #     if domain in email:
+        #         raise ValueError("El dominio del correo no está permitido")
+
+        if not password:
+            raise ValueError("La contraseña no puede estar vacía")
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_staff", True)
+
+
+        return self.create_user(email, password, **extra_fields)
+
+
+
+class UserModel(PermissionsMixin, AbstractBaseUser):
+    username = models.CharField(max_length=15, unique=True, null= False, blank=False, verbose_name="usuario")
+    email = models.EmailField(max_length=100, unique=True, null=False, blank=False, verbose_name="Correo electrónico", help_text="(Obligatorio)")
     # Fabio, cambia lo que gustes en contraseña
-    contrasena = models.TextField(min_length=6, unique=True, null=False, blank=False, help_text="(Obligatorio)")
+    password = models.TextField(unique=True, null=False, blank=False, help_text="(Obligatorio)")
     imagen = models.TextField(null=False, blank=False)
     descripcion = models.TextField(max_length=350)
-    es_superusuario = models.BooleanField(default=False, verbose_name="¿Es super usuario?")
+    is_superuser = models.BooleanField(default=False, verbose_name="¿Es super usuario?")
+    is_staff = models.BooleanField(default=False, verbose_name="Es staff?")
 
     # Fabio, con objects pordrás llamar a la verificación de usuario
     # objects = UsuarioManager()
 
-    USERNAME_FIELD = "correo"
-    REQUIRED_FIELDS = ["usuario", "contrasena"]
+    objects = UserManager()
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     class Meta:
         db_table = "usuarios"
-        ordering = ("-correo",)
+        ordering = ("-email",)
         verbose_name = "Usuario"
         verbose_name_plural = "Usuarios"
 
     def __str__(self):
-        return f"[{self.id}] - {self.usuario} - {self.correo}"
+        return f"[{self.id}] - {self.username} - {self.correo}"
 
     def save(self, *args, **kwargs):
-        if not self.usuario:
-            self.usuario = "Saitama"
+        if not self.username:
+            self.username = "Saitama"
         super().save(*args, **kwargs)

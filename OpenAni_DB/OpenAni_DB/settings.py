@@ -141,4 +141,4 @@ MEDIA_ROOT = ASSETS_DIR / 'media'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = "Users.UsuarioModel"
+AUTH_USER_MODEL = "Users.UserModel"
