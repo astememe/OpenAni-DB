@@ -1,7 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-
 # class UsuarioManager(BaseUserManager):
 # Lógica de verificación (Fabio)
 
@@ -33,6 +32,7 @@ class UserManager(BaseUserManager):
 
 
 class UserModel(PermissionsMixin, AbstractBaseUser):
+    token = models.CharField(verbose_name="Token de usuario", unique=True)
     username = models.CharField(max_length=15, unique=True, null= False, blank=False, verbose_name="usuario")
     email = models.EmailField(max_length=100, unique=True, null=False, blank=False, verbose_name="Correo electrónico", help_text="(Obligatorio)")
     # Fabio, cambia lo que gustes en contraseña
