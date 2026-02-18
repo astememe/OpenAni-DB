@@ -19,14 +19,10 @@ class TorrentViews(APIView):
             serializer.save()
             return Response({"Success": True}, status=status.HTTP_201_CREATED)
         else:
-            errores = []
-            for error in serializer.errors.values():
-                for e in error:
-                    errores.append(e)
+            print(serializer.errors)
+            return Response({"Errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"Errors": errores}, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request, torrent_nombre=None):
+    def get(self, request):
         nombre_query = request.query_params.get('nombre', None)
         id_query = request.query_params.get('id', None)
 

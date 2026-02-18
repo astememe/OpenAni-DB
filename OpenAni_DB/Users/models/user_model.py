@@ -5,7 +5,7 @@ from django.db import models
 # Lógica de verificación (Fabio)
 
 class UserManager(BaseUserManager):
-    def create_user(self, email=None, password=None, **extra_fields):
+    def create_user(self, email=None, password=None,**extra_fields):
         if not email:
             raise ValueError("El correo electrónico no puede estar vacío")
 
@@ -14,7 +14,13 @@ class UserManager(BaseUserManager):
         #         raise ValueError("El dominio del correo no está permitido")
 
         if not password:
-            raise ValueError("La contraseña no puede estar vacía")
+            raise ValueError("Password can't be empty")
+
+        if len(password) < 6:
+            raise ValueError("Password must be at least 6 characters long")
+
+        if not any(caracter.isdigit() for caracter in password):
+            raise ValueError("Password must contain at least one digit")
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
@@ -32,13 +38,11 @@ class UserManager(BaseUserManager):
 
 
 class UserModel(PermissionsMixin, AbstractBaseUser):
-    token = models.CharField(verbose_name="Token de usuario", unique=True)
     username = models.CharField(max_length=15, unique=True, null= False, blank=False, verbose_name="usuario")
     email = models.EmailField(max_length=100, unique=True, null=False, blank=False, verbose_name="Correo electrónico", help_text="(Obligatorio)")
     # Fabio, cambia lo que gustes en contraseña
-    password = models.TextField(unique=True, null=False, blank=False, help_text="(Obligatorio)")
-    imagen = models.TextField(null=False, blank=False)
-    descripcion = models.TextField(max_length=350)
+    imagen = models.CharField(null=False, blank=False)
+    descripcion = models.TextField(max_length=350, default="Escriba su nueva descripción")
     is_superuser = models.BooleanField(default=False, verbose_name="¿Es super usuario?")
     is_staff = models.BooleanField(default=False, verbose_name="Es staff?")
 
@@ -46,7 +50,7 @@ class UserModel(PermissionsMixin, AbstractBaseUser):
     # objects = UsuarioManager()
 
     objects = UserManager()
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
     class Meta:
@@ -56,7 +60,7 @@ class UserModel(PermissionsMixin, AbstractBaseUser):
         verbose_name_plural = "Usuarios"
 
     def __str__(self):
-        return f"[{self.id}] - {self.username} - {self.correo}"
+        return f"[{self.id}] - {self.username} - {self.email}"
 
     def save(self, *args, **kwargs):
         if not self.username:

@@ -13,6 +13,7 @@ from email.policy import default
 from pathlib import Path
 
 from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +30,7 @@ if SECRET_KEY == "":
     raise ValueError("SECRET_KEY not set")
 
 if DEBUG:
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS=["10.0.2.2", "*"]
 else:
     ALLOWED_HOSTS = config("ALLOWED_HOSTS", default=[])
     if isinstance(ALLOWED_HOSTS, str):
@@ -118,6 +119,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # El token dura 1 día
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer'), # En Android enviarás: "Bearer <token>"
 }
 
 # Internationalization
