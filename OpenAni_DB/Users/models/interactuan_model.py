@@ -3,6 +3,9 @@ from rest_framework.fields import BooleanField
 
 
 class InteractuanModel(models.Model):
+    user = models.ForeignKey("UserModel", on_delete=models.CASCADE)
+    comentario = models.ForeignKey("Torrents.ComentarioModel", on_delete=models.CASCADE)
+
     es_like = BooleanField(default=False)
     es_dislike = BooleanField(default=False)
 
