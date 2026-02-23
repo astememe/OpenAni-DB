@@ -38,7 +38,6 @@ else:
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,8 +49,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
 
-    'Torrents',
     'Users',
+    'Torrents',
+    # 'Torrents.apps.TorrentsConfig',
+    # 'Users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # El token dura 1 día
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'AUTH_HEADER_TYPES': ('Bearer '), # En Android enviarás: "Bearer <token>"
+    'AUTH_HEADER_TYPES': ('Bearer ', ), # En Android enviarás: "Bearer <token>"
 }
 
 # Internationalization

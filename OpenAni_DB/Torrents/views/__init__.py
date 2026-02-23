@@ -1,1 +1,1 @@
-from ..views.torrents_views import TorrentViews
+from .torrents_views import TorrentViews

@@ -1,12 +1,10 @@
-from rest_framework import permissions, status
-from rest_framework.generics import get_object_or_404
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.templatetags.rest_framework import data
 from rest_framework.views import APIView
 
-from ..serializers import TorrentSerializer
-from ..models import TorrentModel
+from Torrents.models import TorrentModel
+from Torrents.serializers import TorrentSerializer
 
 
 class TorrentViews(APIView):

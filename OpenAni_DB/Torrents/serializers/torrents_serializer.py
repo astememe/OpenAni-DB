@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from ..models import TorrentModel
+from Torrents.models import TorrentModel
+
 
 class TorrentSerializer(serializers.ModelSerializer):
     class Meta:

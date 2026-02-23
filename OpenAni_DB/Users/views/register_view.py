@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from ..serializers import RegisterSerializer
+from Users.serializers import RegisterSerializer
 
 
 class RegisterView(APIView):
@@ -16,7 +16,6 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
-            return Response({"success": True, "user": serializer.data, "access": str(refresh.access_token), "refresh": str(refresh)
-                             }, status=status.HTTP_200_OK)
+            return Response({"success": True, "user": serializer.data, "access": str(refresh.access_token), "refresh": str(refresh)}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

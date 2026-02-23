@@ -1,7 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ..models import UserModel
-from ..serializers import UserSerializer
+
+from Users.models import UserModel
+from Users.serializers import UserSerializer
+
 
 class UserView(APIView):
 

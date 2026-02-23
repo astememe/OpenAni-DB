@@ -1,14 +1,13 @@
 from django.db import models
-from django.db.models import BooleanField
-
 
 class FavoritoModel(models.Model):
-    users = models.ForeignKey("UserModel", on_delete=models.CASCADE)
-    torrents = models.ForeignKey("Torrents.TorrentModel", on_delete=models.CASCADE)
+    user = models.ForeignKey("UserModel", on_delete=models.CASCADE)
+    torrent = models.ForeignKey("Torrents.TorrentModel", on_delete=models.CASCADE)
 
-    es_favorito = BooleanField(default=False)
-    es_like = BooleanField(default=False)
-    es_dislike = BooleanField(default=False)
+    class Meta:
+        unique_together = (('user', 'torrent'),)
+        verbose_name = "Favorito"
+        verbose_name_plural = "Favoritos"
 
     def __str__(self):
-        return f"favorito = {self.es_favorito}"
+        return f"User: {self.user} - Torrent: {self.torrent}"
