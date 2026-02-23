@@ -6,7 +6,6 @@ from Users.models import FavoritoModel
 class FavoritoSerializer(serializers.ModelSerializer):
     nombre_usuario = serializers.CharField(required=True)
     nombre_torrent = serializers.CharField(required=True)
-    categoria = serializers.CharField(required=True)
     enlace = serializers.CharField(required=True)
     tamano = serializers.CharField(required=True)
     fecha = serializers.CharField(required=True)
@@ -15,4 +14,4 @@ class FavoritoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FavoritoModel
-        fields = ("nombre_usuario", "nombre_torrent", "categoria", "enlace", "tamano", "fecha", "seeders", "leechers")
+        fields = ("nombre_usuario", "nombre_torrent", "enlace", "tamano", "fecha", "seeders", "leechers")
