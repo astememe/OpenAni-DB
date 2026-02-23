@@ -5,7 +5,7 @@ class ComentarioModel(models.Model):
     nombre_usuario = models.CharField(max_length=15, null= False, blank=False, verbose_name="Nombre de Usuario")
     imagen_usuario = models.CharField(null=False, blank=False, verbose_name="Imagen de Usuario")
     texto_usuario = models.TextField(max_length=350, verbose_name='Texto de comentario', blank=True, null=True)
-    fecha = models.DateField(verbose_name="Fecha de publicación") # Se rellenará automaticamente
+    fecha = models.DateField(verbose_name="Fecha de publicación")
 
     class Meta:
         db_table = 'comentario'
