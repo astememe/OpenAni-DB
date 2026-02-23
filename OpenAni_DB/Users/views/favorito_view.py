@@ -9,7 +9,12 @@ from Users.serializers import FavoritoSerializer
 class FavoritoView(APIView):
     def get(self, request):
         favoritos = FavoritoModel.objects.all()
+        nombre_user_query = request.query_params.get('nombre_usuario', None)
         serializer = FavoritoSerializer(favoritos, many=True)
+        if nombre_user_query:
+            favoritos = FavoritoModel.objects.filter(nombre_usuario__icontains=nombre_user_query)
+            serializer = FavoritoSerializer(favoritos, many=True)
+            return Response({"favoritos": serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.data)
 
     def post(self, request):
