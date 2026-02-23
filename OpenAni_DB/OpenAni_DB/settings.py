@@ -120,15 +120,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # El token dura 1 día
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'AUTH_HEADER_TYPES': ('Bearer ', ), # En Android enviarás: "Bearer <token>"
+    'AUTH_HEADER_TYPES': ('Bearer', ), # En Android enviarás: "Bearer <token>"
 }
 
 # Internationalization
