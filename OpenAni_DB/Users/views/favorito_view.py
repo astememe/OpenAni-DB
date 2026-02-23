@@ -8,19 +8,16 @@ from Users.serializers import FavoritoSerializer
 
 class FavoritoView(APIView):
     def get(self, request):
-        favoritos = FavoritoModel.objects.filter(user=request.user)
+        favoritos = FavoritoModel.objects.all()
         serializer = FavoritoSerializer(favoritos, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
 
     def post(self, request):
-        torrent_id = request.data.get('torrent_id')
-        user = request.user
-
-        favorito_qs = FavoritoModel.objects.filter(user=user, torrent_id=torrent_id)
-
-        if not torrent_id:
-            favorito_qs.delete()
-            return Response(f"No se encontró torrent", status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        serializer = FavoritoSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"Success": True}, status=status.HTTP_201_CREATED)
         else:
-            FavoritoModel.objects.create(user=user, torrent_id=torrent_id)
-            return Response({"es_favorito": True}, status=status.HTTP_201_CREATED)
+            print(serializer.errors)
+            return Response({"Errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
