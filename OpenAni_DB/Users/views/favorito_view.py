@@ -17,6 +17,8 @@ class FavoritoView(APIView):
             return Response({"favoritos": serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.data)
 
+        return Response(serializer.data)
+
     def post(self, request):
         data = request.data
         serializer = FavoritoSerializer(data=data)
