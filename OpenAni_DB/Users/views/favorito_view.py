@@ -1,12 +1,15 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from Users.models import FavoritoModel
 from Users.serializers import FavoritoSerializer
 
 
 class FavoritoView(APIView):
+    authentication_classes = [JWTAuthentication]
     def get(self, request):
         favoritos = FavoritoModel.objects.all()
         nombre_user_query = request.query_params.get('nombre_usuario', None)
