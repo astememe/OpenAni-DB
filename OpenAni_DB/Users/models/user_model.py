@@ -40,13 +40,10 @@ class UserManager(BaseUserManager):
 class UserModel(PermissionsMixin, AbstractBaseUser):
     username = models.CharField(max_length=15, unique=True, null= False, blank=False, verbose_name="usuario")
     email = models.EmailField(max_length=100, unique=True, null=False, blank=False, verbose_name="Correo electrónico", help_text="(Obligatorio)")
-    # Fabio, cambia lo que gustes en contraseña
     imagen = models.CharField(null=False, blank=False)
     descripcion = models.TextField(max_length=350, default="Escriba su nueva descripción")
     is_superuser = models.BooleanField(default=False, verbose_name="¿Es super usuario?")
     is_staff = models.BooleanField(default=False, verbose_name="Es staff?")
-
-    # Fabio, con objects pordrás llamar a la verificación de usuario
     # objects = UsuarioManager()
 
     objects = UserManager()
