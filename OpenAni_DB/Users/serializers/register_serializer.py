@@ -21,6 +21,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         if user:
             raise serializers.ValidationError("Email already registered")
 
+        user = UserModel.objects.filter(username=value)
+        if user:
+            raise serializers.ValidationError("Username already in use")
         return value
 
     def validate_password(self, value):
