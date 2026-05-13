@@ -1,1 +1,2 @@
 from .message_serializer import MessageSerializer
+from .room_serializer import RoomSerializer
