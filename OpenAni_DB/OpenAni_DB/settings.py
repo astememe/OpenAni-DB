@@ -134,6 +134,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer', ),
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
