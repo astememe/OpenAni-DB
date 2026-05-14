@@ -1,16 +1,13 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.contrib.auth import get_user_model # Importante para usar tu UserModel
-from Messaging.models import message_model
-
-User = get_user_model()
+from Messaging.models import MessageModel, RoomModel # Nombres correctos
+from Users.models import UserModel
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_id = self.scope['url_route']['kwargs']['group_id']
         self.room_group_name = f'chat_{self.group_id}'
-
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
@@ -18,37 +15,32 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-        try:
-            data = json.loads(text_data)
-            message_text = data['message']
-            username = data['sender_username']
+        data = json.loads(text_data)
+        message_text = data.get('message')
+        username = data.get('sender_username')
 
-            await self.save_message(username, self.group_id, message_text)
+        msg_obj = await self.save_message(username, self.group_id, message_text)
 
+        if msg_obj:
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message': message_text,
-                    'sender_username': username
+                    'message': msg_obj.text,
+                    'sender_username': msg_obj.sender.username,
+                    'timestamp': msg_obj.timestamp.strftime("%Y-%m-%d %H:%M:%S")
                 }
             )
-        except Exception as e:
-            print(f"Error en receive: {e}")
 
     async def chat_message(self, event):
-        await self.send(text_data=json.dumps({
-            'message': event['message'],
-            'sender_username': event['sender_username'],
-            'timestamp': "ahora" # Opcional: puedes pasar el tiempo real aquí
-        }))
+        await self.send(text_data=json.dumps(event))
 
     @database_sync_to_async
-    def save_message(self, username, thread_id, text):
+    def save_message(self, username, room_id, text):
         try:
-            user = User.objects.get(username=username)
-            # Asegúrate de que el campo en tu modelo se llame 'thread' o 'thread_id'
-            return message_model.objects.create(thread_id=thread_id, sender=user, message=text)
+            user = UserModel.objects.get(username=username)
+            room = RoomModel.objects.get(id=room_id)
+            return MessageModel.objects.create(room=room, sender=user, text=text)
         except Exception as e:
             print(f"Error guardando mensaje: {e}")
             return None
