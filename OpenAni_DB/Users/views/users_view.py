@@ -35,6 +35,10 @@ class UserView(APIView):
         return Response(serializer.errors, status=400)
 
     def get(self, request):
-        user = UserModel.objects.filter(username=request.query_params.get('username'))
-        serializer = UserSerializer(user, many=True)
+        if request.query_params.get('username'):
+            user = UserModel.objects.filter(username=request.query_params.get('username'))
+            serializer = UserSerializer(user, many=True)
+        else:
+            user = UserModel.objects.all()
+            serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
